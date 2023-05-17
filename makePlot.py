@@ -102,13 +102,17 @@ g_results_tot.Draw("P SAME")
 g_results_stat.Draw("P SAME")
 
 texts = []
+lowest_y = 0.312
+textsep = 0.182
 refsep = 0.04
-texts.append(addText(x=0.01, y=0.67,        text = m_8TeV.title(), font=43, size=18))
-texts.append(addText(x=0.01, y=0.67-refsep, text = m_8TeV.reference(), font=43, size=14))
-texts.append(addText(x=0.01, y=0.48,        text = m_13TeV_2016.title(), font=43, size=18))
-texts.append(addText(x=0.01, y=0.48-refsep, text = m_13TeV_2016.reference(), font=43, size=14))
-texts.append(addText(x=0.01, y=0.31,        text = m_13TeV_RunII.title(), font=43, size=18))
-texts.append(addText(x=0.01, y=0.31-refsep, text = m_13TeV_RunII.reference(), font=43, size=14))
+
+
+texts.append(addText(x=0.01, y=lowest_y+2*textsep,        text = m_8TeV.title(), font=43, size=18))
+texts.append(addText(x=0.01, y=lowest_y+2*textsep-refsep, text = m_8TeV.reference(), font=43, size=14))
+texts.append(addText(x=0.01, y=lowest_y+textsep,        text = m_13TeV_2016.title(), font=43, size=18))
+texts.append(addText(x=0.01, y=lowest_y+textsep-refsep, text = m_13TeV_2016.reference(), font=43, size=14))
+texts.append(addText(x=0.01, y=lowest_y,        text = m_13TeV_RunII.title(), font=43, size=18))
+texts.append(addText(x=0.01, y=lowest_y-refsep, text = m_13TeV_RunII.reference(), font=43, size=14))
 texts.append(getCMS())
 texts.append(getPrelim())
 for t in texts:

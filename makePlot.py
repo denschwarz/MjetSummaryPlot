@@ -102,7 +102,7 @@ g_results_tot.Draw("P SAME")
 g_results_stat.Draw("P SAME")
 
 texts = []
-lowest_y = 0.312
+lowest_y = 0.325
 textsep = 0.182
 refsep = 0.04
 

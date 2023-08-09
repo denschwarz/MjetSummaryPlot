@@ -20,7 +20,7 @@ m_13TeV_2016.setReference("Phys. Rev. Lett. 124 (2020) 202001")
 m_13TeV_RunII = measurement("13 TeV (138 fb^{-1})")
 m_13TeV_RunII.setResult(173.06, 0.84)
 m_13TeV_RunII.setUncertainties(stat=0.24, exp=0.61, mod=0.47, theo=0.23)
-m_13TeV_RunII.setReference("Accepted by EPJC")
+m_13TeV_RunII.setReference("Eur. Phys. J. C 83 (2023) 560")
 
 measurements.append(m_13TeV_RunII)
 measurements.append(m_13TeV_2016)

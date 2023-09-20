@@ -1,11 +1,15 @@
 import ROOT
 
-def setResultStyle(g, col):
+def setResultStyle(g, col, option=None):
     g.SetTitle("")
     g.SetMarkerStyle(8)
-    g.SetMarkerSize(1)
+    g.SetMarkerSize(1.5)
     g.SetMarkerColor(col)
     g.SetLineColor(col)
+    g.SetLineWidth(3)
+    if option == "stat":
+        g.SetLineWidth(3)
+        g.SetMarkerColor(1)
 
     # X axis
     g.GetXaxis().SetTitle("#it{m}_{t} [GeV]")

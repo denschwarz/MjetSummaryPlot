@@ -37,8 +37,8 @@ for i, m in enumerate(measurements):
     g_results_stat.SetPoint(i, m.mtop(), i*2)
     g_results_stat.SetPointError(i, m.uncertStat(), 0.0)
 
-setResultStyle(g_results_tot, 15)
-setResultStyle(g_results_stat, ROOT.kBlack)
+setResultStyle(g_results_tot, 1)
+setResultStyle(g_results_stat, ROOT.kRed, "stat")
 
 ################################################################################
 ## Contruct ucnert graphs
@@ -63,7 +63,7 @@ for i, m in enumerate(measurements):
     g_uncerts_theory.SetPoint(i, m.uncertTheory()/2, i*2-sep/2-ywidth-sep-ywidth/2)
     g_uncerts_theory.SetPointError(i, m.uncertTheory()/2, ywidth/2)
 
-setUncertStyle(g_uncerts_stat, 15)
+setUncertStyle(g_uncerts_stat, 16)
 setUncertStyle(g_uncerts_exp, ROOT.kAzure+7)
 setUncertStyle(g_uncerts_model, ROOT.kRed+2)
 setUncertStyle(g_uncerts_theory, ROOT.kOrange-3)
@@ -76,6 +76,8 @@ ROOT.gStyle.SetLegendBorderSize(0)
 ROOT.gStyle.SetPadTickX(1)
 ROOT.gStyle.SetPadTickY(1)
 ROOT.gStyle.SetOptStat(0)
+ROOT.gStyle.SetEndErrorSize(5)
+
 xboundary = 0.65
 seperation = 0.05
 topmarg = 0.01
@@ -96,7 +98,8 @@ pad2.SetBottomMargin(botmarg)
 pad2.Draw()
 
 pad1.cd()
-dummy_results = getDummyGraph(160, 182, -1, 7)
+# dummy_results = getDummyGraph(160, 182, -1, 7)
+dummy_results = getDummyGraph(163, 178.45, -1, 7)
 dummy_results.Draw("AP")
 g_results_tot.Draw("P SAME")
 g_results_stat.Draw("P SAME")

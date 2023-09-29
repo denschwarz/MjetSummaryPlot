@@ -3,10 +3,10 @@ import ROOT
 def setResultStyle(g, col, option=None):
     g.SetTitle("")
     g.SetMarkerStyle(8)
-    g.SetMarkerSize(1.5)
+    g.SetMarkerSize(1.25)
     g.SetMarkerColor(col)
     g.SetLineColor(col)
-    g.SetLineWidth(3)
+    g.SetLineWidth(1)
     if option == "stat":
         g.SetLineWidth(3)
         g.SetMarkerColor(1)
@@ -36,12 +36,13 @@ def setUncertStyle(g, col):
     g.GetXaxis().SetTitle("Uncertainty [GeV]")
 
 
-def addText(x, y, text, font=43, size=12):
+def addText(x, y, text, font=43, size=12, color=1):
     latex = ROOT.TLatex(3.5, 24, text)
     latex.SetNDC()
     latex.SetTextAlign(13)
     latex.SetTextFont(font)
     latex.SetTextSize(size)
+    latex.SetTextColor(color)
     latex.SetX(x)
     latex.SetY(y)
     return latex

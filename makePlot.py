@@ -37,8 +37,11 @@ for i, m in enumerate(measurements):
     g_results_stat.SetPoint(i, m.mtop(), i*2)
     g_results_stat.SetPointError(i, m.uncertStat(), 0.0)
 
-setResultStyle(g_results_tot, 1)
-setResultStyle(g_results_stat, ROOT.kRed, "stat")
+color_stat = ROOT.TColor.GetColor("#2b2b2b")
+color_tot = ROOT.TColor.GetColor("#2b2b2b")
+
+setResultStyle(g_results_tot, color_tot)
+setResultStyle(g_results_stat, color_stat, "stat")
 
 ################################################################################
 ## Contruct ucnert graphs
@@ -123,14 +126,43 @@ texts.append(getPrelim())
 for t in texts:
     t.Draw()
 
-leg1 = ROOT.TLegend(.5, .8, .95, .93)
-leg1.SetNColumns(1)
-leg1.AddEntry(g_results_stat, "Stat. uncertainty","pl")
-leg1.AddEntry(g_results_tot, "Total uncertainty","pl")
-leg1.SetTextSize(0.04)
-leg1.Draw()
+# leg1 = ROOT.TLegend(.5, .8, .95, .93)
+# leg1.SetNColumns(1)
+# leg1.AddEntry(g_results_stat, "Stat. uncertainty","pl")
+# leg1.AddEntry(g_results_tot, "Total uncertainty","pl")
+# leg1.SetTextSize(0.04)
+# leg1.Draw()
+
+################################################################################
+# Create a Marker for the legend and label stat. and tot. uncertainty bars
+leg_marker_x = 163+(178.45-163)/2
+leg_marker_y = 7
+leg_marker_statUncert = 3.5
+leg_marker_totUncert = 6
+
+legend_marker_tot = ROOT.TGraphErrors(1)
+legend_marker_stat = ROOT.TGraphErrors(1)
+legend_marker_tot.SetPoint(1, leg_marker_x, leg_marker_y)
+legend_marker_tot.SetPointError(1, leg_marker_totUncert, 0.0)
+legend_marker_stat.SetPoint(1, leg_marker_x, leg_marker_y)
+legend_marker_stat.SetPointError(1, leg_marker_statUncert, 0.0)
+setResultStyle(legend_marker_tot, color_tot)
+setResultStyle(legend_marker_stat, color_tot, option="stat")
+legend_marker_tot.Draw("P SAME")
+legend_marker_stat.Draw("P SAME")
+
+y_legend_marker_text = 0.9
+x_legend_marker_text_stat = 0.805
+x_legend_marker_text_tot = 0.882
+allTexts = []
+allTexts.append(addText(x_legend_marker_text_stat, y_legend_marker_text, "stat.", font=43, size=14, color=13))
+allTexts.append(addText(x_legend_marker_text_tot, y_legend_marker_text+0.002, "total", font=43, size=14, color=13))
+for t in allTexts:
+    t.Draw()
+
 ROOT.gPad.RedrawAxis()
 
+################################################################################
 
 pad2.cd()
 dummy_uncerts = getDummyGraphUncert(0, 6.5, -1, 7)

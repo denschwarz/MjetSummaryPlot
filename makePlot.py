@@ -140,6 +140,12 @@ leg_marker_y = 7
 leg_marker_statUncert = 3.5
 leg_marker_totUncert = 6
 
+leg_marker_x = 165.
+leg_marker_y = 7
+leg_marker_statUncert = 0.7
+leg_marker_totUncert = 2.6
+
+
 legend_marker_tot = ROOT.TGraphErrors(1)
 legend_marker_stat = ROOT.TGraphErrors(1)
 legend_marker_tot.SetPoint(1, leg_marker_x, leg_marker_y)
@@ -154,9 +160,13 @@ legend_marker_stat.Draw("P SAME")
 y_legend_marker_text = 0.9
 x_legend_marker_text_stat = 0.805
 x_legend_marker_text_tot = 0.882
+x_legend_marker_text_stat = 0.545
+x_legend_marker_text_tot = 0.605
 allTexts = []
 allTexts.append(addText(x_legend_marker_text_stat, y_legend_marker_text, "stat.", font=43, size=14, color=13))
 allTexts.append(addText(x_legend_marker_text_tot, y_legend_marker_text+0.002, "total", font=43, size=14, color=13))
+allTexts.append(addText(0.665, y_legend_marker_text+0.033, "Measurement of #it{m}_{t}", font=43, size=18, color=1))
+
 for t in allTexts:
     t.Draw()
 

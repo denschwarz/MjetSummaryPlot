@@ -1,10 +1,10 @@
 import ROOT
 
-def setResultStyle(g, col, option=None):
+def setResultStyle(g, col, option=None, delta=False):
     g.SetTitle("")
     g.SetMarkerStyle(8)
     g.SetMarkerSize(1.25)
-    g.SetMarkerColor(col)
+    g.SetMarkerColor(1)
     g.SetLineColor(col)
     g.SetLineWidth(1)
     if option == "stat":
@@ -13,6 +13,9 @@ def setResultStyle(g, col, option=None):
 
     # X axis
     g.GetXaxis().SetTitle("#it{m}_{t} [GeV]")
+    if delta:
+        g.GetXaxis().SetTitle("#Delta#it{m}_{t} [GeV]")
+
     g.GetXaxis().SetTitleSize(0.02)
     g.GetXaxis().SetNdivisions(505)
     g.GetXaxis().SetTitleSize(25)
@@ -28,12 +31,14 @@ def setResultStyle(g, col, option=None):
     g.GetYaxis().SetLabelSize(0.0)
     g.GetYaxis().SetTickLength(0.0)
 
-def setUncertStyle(g, col):
+def setUncertStyle(g, col, delta=False):
     setResultStyle(g, ROOT.kWhite)
     g.SetTitle("")
     g.SetFillColor(col)
     g.SetMarkerSize(0)
-    g.GetXaxis().SetTitle("Uncertainty [GeV]")
+    g.GetXaxis().SetTitle("#it{m}_{t} uncertainty [GeV]")
+    if delta:
+        g.GetXaxis().SetTitle("#Delta#it{m}_{t} uncertainty [GeV]")
 
 
 def addText(x, y, text, font=43, size=12, color=1):
@@ -47,32 +52,39 @@ def addText(x, y, text, font=43, size=12, color=1):
     latex.SetY(y)
     return latex
 
-def getDummyGraph(xmin, xmax, ymin, ymax):
+def getDummyGraph(xmin, xmax, ymin, ymax, delta = False):
     g = ROOT.TGraph(4)
     g.SetPoint(0, xmin, ymin)
     g.SetPoint(1, xmin, ymax)
     g.SetPoint(2, xmax, ymax)
     g.SetPoint(3, xmax, ymin)
     g.SetMarkerSize(0.0)
-    setResultStyle(g, ROOT.kWhite)
+    if delta:
+        setResultStyle(g, ROOT.kWhite, option=None, delta=True)
+    else:
+        setResultStyle(g, ROOT.kWhite)
+
     return g
 
-def getDummyGraphUncert(xmin, xmax, ymin, ymax):
+def getDummyGraphUncert(xmin, xmax, ymin, ymax, delta = False):
     g = ROOT.TGraph(4)
     g.SetPoint(0, xmin, ymin)
     g.SetPoint(1, xmin, ymax)
     g.SetPoint(2, xmax, ymax)
     g.SetPoint(3, xmax, ymin)
     g.SetMarkerSize(0.0)
-    setUncertStyle(g, ROOT.kWhite)
+    if delta:
+        setUncertStyle(g, ROOT.kWhite, delta=True)
+    else:
+        setUncertStyle(g, ROOT.kWhite)
     return g
 
-def getCMS():
+def getCMS(factor=1.0):
     cmstext = ROOT.TLatex(3.5, 24, "CMS")
     cmstext.SetNDC()
     cmstext.SetTextAlign(13)
     cmstext.SetTextFont(62)
-    cmstext.SetTextSize(0.08)
+    cmstext.SetTextSize(0.08*factor)
     cmstext.SetX(0.01)
     cmstext.SetY(0.98)
     return cmstext

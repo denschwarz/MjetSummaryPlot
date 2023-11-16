@@ -1,27 +1,57 @@
 import ROOT
+import math
 from measurement import measurement
 from graphs import *
+
 
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
 
 
 measurements = []
-m_7TeV = measurement("7 TeV (5 fb^{-1})")
-m_7TeV.setResult(-0.44, 0.53)
-m_7TeV.setUncertainties(stat=0.46, exp=0.17, mod=0.16, theo=None)
-m_7TeV.setReference("JHEP 06 (2012) 109")
 
-m_8TeV = measurement("8 TeV (19.7 fb^{-1})")
-m_8TeV.setResult(-0.15, 0.21)
-m_8TeV.setUncertainties(stat=0.19, exp=0.11, mod=0.11, theo=None)
-m_8TeV.setReference("Phys. Lett. B 770 (2017) 50")
+m_7TeV = measurement("7 TeV (5.0 fb^{-1}) ideogram")
+m_7TeV.setResult(173.49, 1.07)
+m_7TeV.setUncertainties(stat=0.43,
+                        exp=math.sqrt(0.06**2+0.61**2+0.28**2+0.02**2+0.06**2
+                                      +0.23**2+0.12**2+0.07**2+0.13**2),
+                        mod=math.sqrt(0.07**2+0.24**2+0.18**2+0.15**2+0.54**2),
+                        theo=0)
+m_7TeV.setReference("JHEP 12 (2012) 105")
 
-m_13TeV = measurement("13 TeV (35.9 fb^{-1})")
-m_13TeV.setResult(0.83, 1.79)
-m_13TeV.setUncertainties(stat=0.69, exp=1.31, mod=1.09, theo=None)
-m_13TeV.setReference("JHEP 12 (2021) 161")
+m_8TeV = measurement("8 TeV (19.7 fb^{-1}) ideogram")
+m_8TeV.setResult(172.35, 0.51)
+m_8TeV.setUncertainties(stat=0.16,
+                        exp=math.sqrt(0.04**2+0.01**2+0.12**2+0.10**2+0.04**2
+                                      +0.01**2+0.04**2+0.03**2+0.06**2+0.04**2+0.03**2),
+                        mod=math.sqrt(0.34**2+0.16**2+0.04**2+0.09**2+0.07**2+0.12**2+
+                                      0.02**2+0.11**2+0.09**2+0.01**2),
+                        theo=math.sqrt(0.07**2+0.07**2+0.08**2+0.11**2+0.09**2))
+m_8TeV.setReference("Phys. Rev. D 93 (2016) 072004")
 
-measurements.append(m_13TeV)
+m_13TeV_2016 = measurement("13 TeV (35.9 fb^{-1}) ideogram")
+m_13TeV_2016.setResult(172.25, 0.63)
+m_13TeV_2016.setUncertainties(stat=0.08,
+                              exp=math.sqrt(0.05**2+0.18**2+0.04**2+0.03**2+0.05**2+0.02**2),
+                              mod=math.sqrt(0.39**2+0.12**2+0.02**2+0.01**2+0.05**2+
+                                            0.22**2+0.07**2+0.13**2+0.01**2+0.07**2+
+                                            0.07**2+0.31**2),
+                              theo=math.sqrt(0.11**2+0.07**2+0.05**2+0.07**2+0.07**2+0.08**2))
+m_13TeV_2016.setReference("Eur. Phys. J. C 78 (2018) 891")
+
+m_13TeV_prof2d = measurement("13 TeV (36.3 fb^{-1}) 2D")
+m_13TeV_prof2d.setResult(172.00, 0.52)
+m_13TeV_prof2d.setUncertainties(stat=0.05, exp=0.34, mod=0.51, theo=0)
+m_13TeV_prof2d.setReference("Eur. Phys. J. C 83 (2023) 963")
+
+
+m_13TeV_prof = measurement("13 TeV (36.3 fb^{-1}) profiled")
+m_13TeV_prof.setResult(171.77, 0.37)
+m_13TeV_prof.setUncertainties(stat=0.04, exp=0.22, mod=0.36, theo=0)
+m_13TeV_prof.setReference("Eur. Phys. J. C 83 (2023) 963")
+
+measurements.append(m_13TeV_prof)
+#measurements.append(m_13TeV_prof2d)
+measurements.append(m_13TeV_2016)
 measurements.append(m_8TeV)
 measurements.append(m_7TeV)
 
@@ -39,12 +69,8 @@ for i, m in enumerate(measurements):
 color_tot = 15
 color_stat = ROOT.TColor.GetColor("#2b2b2b")
 
-setResultStyle(g_results_tot, color_tot, option=None, delta=True)
-setResultStyle(g_results_stat, color_stat, option="stat", delta=True )
-
-col_prediction = ROOT.kMagenta+3
-style_prediction = 6
-width_prediction = 2
+setResultStyle(g_results_tot, color_tot)
+setResultStyle(g_results_stat, color_stat, "stat")
 
 ################################################################################
 ## Contruct ucnert graphs
@@ -100,33 +126,24 @@ pad2.SetBottomMargin(botmarg)
 pad2.Draw()
 
 pad1.cd()
-# dummy_results = getDummyGraph(160, 182, -1, 7)
-dummy_results = getDummyGraph(-2.5, 2.75, -1, 7, delta=True)
+ymax = 1+2*len(measurements)
+dummy_results = getDummyGraph(171, 174.5, -1, ymax)
 dummy_results.SetMarkerSize(0.)
 dummy_results.SetMarkerColor(ROOT.kWhite)
 dummy_results.Draw("AP")
-prediction = ROOT.TLine(0., -1., 0., 4.6)
-prediction.SetLineColor(col_prediction)
-prediction.SetLineStyle(style_prediction)
-prediction.SetLineWidth(width_prediction)
-prediction.Draw("SAME")
 g_results_tot.Draw("P SAME")
 g_results_stat.Draw("P SAME")
 
 texts = []
-lowest_y = 0.325
-textsep = 0.182
+lowest_y = 0.312
+textsep = (1-lowest_y)/(len(measurements) + 0.9)
 refsep = 0.04
 
-texts.append(addText(x=0.01, y=lowest_y+2*textsep,               text = m_7TeV.title(), font=43, size=18))
-texts.append(addText(x=0.01, y=lowest_y+2*textsep-1.11*refsep,   text = "#it{m}_{t} = "+str(m_7TeV.mtop())+" #pm "+str(m_7TeV.uncertTotal())+" GeV", font=43, size=14))
-texts.append(addText(x=0.01, y=lowest_y+2*textsep-2*refsep,      text = m_7TeV.reference(), font=43, size=14))
-texts.append(addText(x=0.01, y=lowest_y+textsep,                 text = m_8TeV.title(), font=43, size=18))
-texts.append(addText(x=0.01, y=lowest_y+textsep-1.11*refsep,     text = "#it{m}_{t} = "+str(m_8TeV.mtop())+" #pm "+str(m_8TeV.uncertTotal())+" GeV", font=43, size=14))
-texts.append(addText(x=0.01, y=lowest_y+textsep-2*refsep,        text = m_8TeV.reference(), font=43, size=14))
-texts.append(addText(x=0.01, y=lowest_y,                         text = m_13TeV.title(), font=43, size=18))
-texts.append(addText(x=0.01, y=lowest_y-1.11*refsep,             text = "#it{m}_{t} = "+str(m_13TeV.mtop())+" #pm "+str(m_13TeV.uncertTotal())+" GeV", font=43, size=14))
-texts.append(addText(x=0.01, y=lowest_y-2*refsep,                text = m_13TeV.reference(), font=43, size=14))
+for i, m in enumerate(measurements):
+    texts.append(addText(x=0.01, y=lowest_y+i*textsep,               text = m.title(), font=43, size=18))
+    texts.append(addText(x=0.01, y=lowest_y+i*textsep-1.11*refsep,   text = "#it{m}_{t} = "+str(m.mtop())+" #pm "+str(m.uncertTotal())+" GeV", font=43, size=14))
+    texts.append(addText(x=0.01, y=lowest_y+i*textsep-2*refsep,      text = m.reference(), font=43, size=14))
+
 texts.append(getCMS(1.5))
 # texts.append(getPrelim())
 for t in texts:
@@ -136,38 +153,28 @@ for t in texts:
 
 ################################################################################
 # Create a Marker for the legend and label stat. and tot. uncertainty bars
-leg_marker_x = -2.
-leg_marker_y = 7
-leg_marker_statUncert = 0.8
-leg_marker_totUncert = 0.8
-leg_sep = 0.7
+leg_marker_x = 171.5
+leg_marker_y = ymax-0.3
+leg_marker_statUncert = 0.5
+leg_marker_totUncert = 0.5
 
 
 legend_marker_tot = ROOT.TGraphErrors(1)
 legend_marker_stat = ROOT.TGraphErrors(1)
-legend_marker_tot.SetPoint(0, leg_marker_x, leg_marker_y-leg_sep)
+legend_marker_tot.SetPoint(0, leg_marker_x, leg_marker_y-0.9)
 legend_marker_tot.SetPointError(0, leg_marker_totUncert, 0.0)
 legend_marker_stat.SetPoint(0, leg_marker_x, leg_marker_y)
 legend_marker_stat.SetPointError(0, leg_marker_statUncert, 0.0)
-legend_line = ROOT.TLine(leg_marker_x-leg_marker_totUncert, leg_marker_y-(2*leg_sep), leg_marker_x+leg_marker_totUncert, leg_marker_y-(2*leg_sep))
-legend_line.SetLineColor(col_prediction)
-legend_line.SetLineStyle(style_prediction)
-legend_line.SetLineWidth(width_prediction)
-
-legend_line.Draw("SAME")
 setResultStyle(legend_marker_tot, color_tot)
 setResultStyle(legend_marker_stat, color_stat, option="stat")
 legend_marker_tot.Draw("P SAME")
 legend_marker_stat.Draw("P SAME")
 
-y_legend_marker_text = 0.93
-y_legend_marker_text2 = 0.867
-y_legend_marker_text3 = 0.804
-
+y_legend_marker_text = 0.91
+y_legend_marker_text2 = 0.843
 allTexts = []
 allTexts.append(addText(0.665, y_legend_marker_text, "Stat. uncertainty", font=43, size=18, color=1))
 allTexts.append(addText(0.665, y_legend_marker_text2, "Total uncertainty", font=43, size=18, color=1))
-allTexts.append(addText(0.665, y_legend_marker_text3, "SM prediction", font=43, size=18, color=1))
 
 for t in allTexts:
     t.Draw()
@@ -177,7 +184,7 @@ ROOT.gPad.RedrawAxis()
 ################################################################################
 
 pad2.cd()
-dummy_uncerts = getDummyGraphUncert(0, 2, -1, 7, delta=True)
+dummy_uncerts = getDummyGraphUncert(0, 0.75, -1, ymax)
 dummy_uncerts.Draw("AP")
 g_uncerts_stat.Draw("E2 SAME")
 g_uncerts_exp.Draw("E2 SAME")
@@ -193,4 +200,4 @@ leg2.Draw()
 
 ROOT.gPad.RedrawAxis()
 
-c.SaveAs("SingleTopDeltaMtopResults.pdf")
+c.SaveAs("DirectResults.pdf")
